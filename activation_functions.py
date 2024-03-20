@@ -6,6 +6,10 @@ def sigmoid(self, x):
     return 1 / (1 + math.exp(-x))
 
 
+def sigmoidPrime(self, x):
+    return sigmoid(x) * (1 - sigmoid(x))
+
+
 def tanh(self, x):
     return (math.exp(x) - math.exp(-x)) / (math.exp(x) + math.exp(-x))
 

@@ -4,7 +4,7 @@ class Layer:
         self.output = None
 
     def forwardPropagation(self, input):
-        print("Initiating BackwardPropagation...")
+        print("Initiating ForwardPropagation...")
 
     def backwardPropagation(self, outputError, learningRate):
-        print("Initiating ForwardPropagation...")
+        print("Initiating BackwardPropagation...")

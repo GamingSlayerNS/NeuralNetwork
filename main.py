@@ -8,7 +8,8 @@ import numpy as np
 import pandas
 
 from network import NeuralNetwork
-from activation_functions import sigmoid
+from activation_functions import sigmoid, sigmoidPrime
+from activation_layer import ActivationLayer
 from hidden_layer import HiddenLayer
 from error import mse, derivativeMSE
 
@@ -25,8 +26,7 @@ y = iris.data.targets
 print(iris.metadata)
 
 # variable information
-#print(iris.variables)
-#print(iris.data)
+print(iris.variables)
 
 
 # Press the green button in the gutter to run the Neural Network.
@@ -35,18 +35,21 @@ if __name__ == '__main__':
     neuralNetwork = NeuralNetwork()
 
     # InputData
-    trainingDataX = np.array()
-    trainingDataY = np.array()
+    trainingDataX = np.array([[[0, 0]], [[0, 1]], [[1, 0]], [[1, 1]]])
+    trainingDataY = np.array([[[0]], [[1]], [[1]], [[0]]])
 
     # Create NeuralNetwork
-    neuralNetwork.add(HiddenLayer())
+    neuralNetwork.add(HiddenLayer(2, 3))
+    neuralNetwork.add(ActivationLayer(sigmoid, sigmoidPrime))
+    neuralNetwork.add(HiddenLayer(3, 1))
+    neuralNetwork.add(ActivationLayer(sigmoid, sigmoidPrime))
 
     # Train Model
-    neuralNetwork.useActivationFunction(mse, derivativeMSE())
-    neuralNetwork.train(trainingDataX, trainingDataY, epochs=500, learningRate=0.1)
+    neuralNetwork.useActivationFunction(mse, derivativeMSE)
+    neuralNetwork.train(trainingDataX, trainingDataY, epochs=3, learningRate=0.1)
 
     # Test Model
-    outputLayer = neuralNetwork.classify()
+    outputLayer = neuralNetwork.classify(trainingDataX)
 
     # Display Output
     print(outputLayer)
