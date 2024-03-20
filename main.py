@@ -8,7 +8,7 @@ import numpy as np
 import pandas
 
 from network import NeuralNetwork
-from activation_functions import sigmoid, sigmoidPrime
+from activation_functions import tanh, tanhPrime
 from activation_layer import ActivationLayer
 from hidden_layer import HiddenLayer
 from error import mse, derivativeMSE
@@ -40,16 +40,17 @@ if __name__ == '__main__':
 
     # Create NeuralNetwork
     neuralNetwork.add(HiddenLayer(2, 3))
-    neuralNetwork.add(ActivationLayer(sigmoid, sigmoidPrime))
+    neuralNetwork.add(ActivationLayer(tanh, tanhPrime))
     neuralNetwork.add(HiddenLayer(3, 1))
-    neuralNetwork.add(ActivationLayer(sigmoid, sigmoidPrime))
+    neuralNetwork.add(ActivationLayer(tanh, tanhPrime))
 
     # Train Model
     neuralNetwork.useActivationFunction(mse, derivativeMSE)
-    neuralNetwork.train(trainingDataX, trainingDataY, epochs=3, learningRate=0.1)
+    neuralNetwork.train(trainingDataX, trainingDataY, epochs=100, learningRate=0.1)
 
     # Test Model
     outputLayer = neuralNetwork.classify(trainingDataX)
 
     # Display Output
+    print("")
     print(outputLayer)

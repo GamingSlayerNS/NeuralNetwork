@@ -9,17 +9,15 @@ class HiddenLayer:
         self.bias = np.random.rand(1, outputSize) - 0.5
 
     def forwardPropagation(self, input):
-        print("Initiating ForwardPropagation...")
         self.input = input
         self.output = np.dot(self.input, self.weights) + self.bias
         return self.output
 
     def backwardPropagation(self, outputError, learningRate):
-        print("Initiating BackwardPropagation...")
         inputError = np.dot(outputError, self.weights.T)
         weightError = np.dot(self.input.T, outputError)
         # Update Weights
-        print("Updating Weights...")
+        # print("Updating Weights...")
         self.weights -= learningRate * weightError
         self.bias -= learningRate * outputError
         return inputError
