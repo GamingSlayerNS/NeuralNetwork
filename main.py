@@ -46,7 +46,7 @@ if __name__ == '__main__':
 
     # Train Model
     neuralNetwork.useActivationFunction(mse, derivativeMSE)
-    neuralNetwork.train(trainingDataX, trainingDataY, epochs=100, learningRate=0.1)
+    neuralNetwork.train(trainingDataX, trainingDataY, epochs=1000, learningRate=0.1)
 
     # Test Model
     outputLayer = neuralNetwork.classify(trainingDataX)
