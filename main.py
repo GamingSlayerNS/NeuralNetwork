@@ -21,18 +21,18 @@ from ucimlrepo import fetch_ucirepo
 iris = load_iris()
 
 # data (as pandas dataframes)
-# X = iris.data.features
-# y = iris.data.targets
+y = iris.target[iris.target != 2]
+X = iris.data[iris.target != 2]
 
 # metadata
 # print(iris.metadata)
 
 # variable information
 # print(iris.variables)
-print(np.expand_dims(iris.data, axis=1))
-print(np.expand_dims(iris.target, axis=1))
-X = np.expand_dims(iris.data, axis=1)
-y = iris.target
+print(X.reshape(X.shape[0], 1, X.shape[1]))
+print(y.reshape(y.shape[0], 1, 1))
+reshapedX = X.reshape(X.shape[0], 1, X.shape[1])
+reshapedY = y.reshape(y.shape[0], 1, 1)
 
 
 # Press the green button in the gutter to run the Neural Network.
@@ -45,8 +45,8 @@ if __name__ == '__main__':
     # InputData
     # trainingDataX = np.array([[[0, 0]], [[0, 1]], [[1, 0]], [[1, 1]]])
     # trainingDataY = np.array([[[0]], [[1]], [[1]], [[0]]])
-    trainingDataX = X
-    trainingDataY = y
+    trainingDataX = reshapedX
+    trainingDataY = reshapedY
     # print(trainingDataX)
 
     # Create NeuralNetwork
