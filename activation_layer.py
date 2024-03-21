@@ -1,7 +1,5 @@
 class ActivationLayer:
     def __init__(self, activation, activationPrime):
-        self.input = None
-        self.output = None
         self.activation = activation
         self.activationPrime = activationPrime
 

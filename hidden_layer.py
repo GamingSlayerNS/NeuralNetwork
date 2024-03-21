@@ -3,10 +3,16 @@ import numpy as np
 
 class HiddenLayer:
     def __init__(self, inputSize, outputSize):
-        self.input = None
-        self.output = None
-        self.weights = np.random.rand(inputSize, outputSize) - 0.5
-        self.bias = np.random.rand(1, outputSize) - 0.5
+        # Relu uses He Weight Activation
+        self.weights = np.random.randn(inputSize, outputSize) * np.sqrt(2 / inputSize)
+        self.bias = np.zeros((1, outputSize))
+        # Sigmoid (Line 10) and Tanh (Line 11) use Xavier Weight Activation
+        # self.weights = np.random.randn(inputSize, outputSize) * np.sqrt(1 / (inputSize + outputSize))
+        # self.weights = np.random.randn(inputSize, outputSize) * np.sqrt(1 / inputSize)
+        # self.bias = np.random.rand(1, outputSize) - 0.5
+        print("Layer: ")
+        print("Weights: ", self.weights)
+        print("Bias: ", self.bias)
 
     def forwardPropagation(self, input):
         self.input = input

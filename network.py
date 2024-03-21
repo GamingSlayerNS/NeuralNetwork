@@ -11,15 +11,15 @@ class OldNeuralNetwork:
 class NeuralNetwork:
     def __init__(self):
         self.layers = []
-        self.activationFunction = None
-        self.deltaActivationFunction = None
+        self.errorFunction = None
+        self.deltaErrorFunction = None
 
     def add(self, layer):
         self.layers.append(layer)
 
-    def useActivationFunction(self, activationFunction, deltaactivationFunction):
-        self.activationFunction = activationFunction
-        self.deltaActivationFunction = deltaactivationFunction
+    def useErrorFunction(self, errorFunction, deltaErrorFunction):
+        self.errorFunction = errorFunction
+        self.deltaErrorFunction = deltaErrorFunction
 
     def train(self, trainingDataX, trainingDataY, epochs, learningRate):
         nodes = len(trainingDataX)
@@ -28,19 +28,19 @@ class NeuralNetwork:
         print("Start Training...")
         for i in range(epochs):
             errorForward = 0
+            # Initiate ForwardPropagation
+            # print("Forwardpass...")
             for j in range(nodes):
-                # Initiate ForwardPropagation
-                # print("Forwardpass...")
                 output = trainingDataX[j]
                 for layer in self.layers:
                     output = layer.forwardPropagation(output)
 
                 # Calculate Error
-                errorForward += self.activationFunction(trainingDataY[j], output)
+                errorForward += self.errorFunction(trainingDataY[j], output)
 
                 # Initiate BackwardPropagation
                 # print("Backwardpass...")
-                errorBackward = self.deltaActivationFunction(trainingDataY[j], output)
+                errorBackward = self.deltaErrorFunction(trainingDataY[j], output)
                 for layer in reversed(self.layers):
                     errorBackward = layer.backwardPropagation(errorBackward, learningRate)
 
