@@ -6,6 +6,7 @@
 import math
 import numpy as np
 import pandas
+from sklearn.datasets import load_iris
 
 from network import NeuralNetwork
 from activation_functions import relu, reluPrime, sigmoid, sigmoidPrime, tanh, tanhPrime
@@ -16,18 +17,22 @@ from error import mse, derivativeMSE
 from ucimlrepo import fetch_ucirepo
 
 # fetch dataset
-iris = fetch_ucirepo(id=53)
+# iris = fetch_ucirepo(id=53)
+iris = load_iris()
 
 # data (as pandas dataframes)
-X = iris.data.features
-y = iris.data.targets
+# X = iris.data.features
+# y = iris.data.targets
 
 # metadata
-print(iris.metadata)
+# print(iris.metadata)
 
 # variable information
-print(iris.variables)
-# print(iris.data)
+# print(iris.variables)
+print(np.expand_dims(iris.data, axis=1))
+print(np.expand_dims(iris.target, axis=1))
+X = np.expand_dims(iris.data, axis=1)
+y = iris.target
 
 
 # Press the green button in the gutter to run the Neural Network.
@@ -38,14 +43,14 @@ if __name__ == '__main__':
     # Cleanup Iris data
 
     # InputData
-    trainingDataX = np.array([[[0, 0]], [[0, 1]], [[1, 0]], [[1, 1]]])
-    trainingDataY = np.array([[[0]], [[1]], [[1]], [[0]]])
-    # trainingDataX = X[y != 2].copy()
-    # trainingDataY = y[y != 2].copy()
+    # trainingDataX = np.array([[[0, 0]], [[0, 1]], [[1, 0]], [[1, 1]]])
+    # trainingDataY = np.array([[[0]], [[1]], [[1]], [[0]]])
+    trainingDataX = X
+    trainingDataY = y
     # print(trainingDataX)
 
     # Create NeuralNetwork
-    neuralNetwork.add(HiddenLayer(2, 4))
+    neuralNetwork.add(HiddenLayer(4, 4))
     neuralNetwork.add(ActivationLayer(relu, reluPrime))
     neuralNetwork.add(HiddenLayer(4, 2))
     neuralNetwork.add(ActivationLayer(relu, reluPrime))
