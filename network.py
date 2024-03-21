@@ -1,14 +1,4 @@
-class OldNeuralNetwork:
-    def __init__(self, numInNodes, numHiddenNodes, numOutNodes, learningRate, activationFunction):
-        self.numInNodes = numInNodes
-        self.numHiddenNodes = numHiddenNodes
-        self.numOutNodes = numOutNodes
-        self.learningRate = learningRate
-        self.activationFunction = activationFunction
-        self.weightMatrices()
-
-
-class NeuralNetwork:
+class Network:
     def __init__(self):
         self.layers = []
         self.errorFunction = None
