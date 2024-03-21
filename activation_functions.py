@@ -3,7 +3,7 @@ import numpy as np
 
 
 def sigmoid(x):
-    return 1 / (1 + math.exp(-x))
+    return 1 / (1 + np.exp(-x))
 
 
 def sigmoidPrime(x):
@@ -20,7 +20,12 @@ def tanhPrime(x):
 
 
 def relu(x):
-    return max(0, x)
+    return np.maximum(0, x)
+
+
+def reluPrime(x):
+    return np.where(x > 0, 1, 0)
+    # return (x > 0).astype(x.dtype)
 
 
 def leakyRelu(x, alpha=0.1):
