@@ -94,18 +94,18 @@ class NeuralNetwork:
         # Test Model
         self.outputLayer = self.network.classify(trainingDataX)
 
-    def renderOutput(self, actualY):
+    def renderOutput(self, actualY, type):
         # Display Output
         np.set_printoptions(precision=6, suppress=True)
         output = np.array([item.ravel() for item in self.outputLayer]).T
         actual = actualY.reshape(actualY.shape[0], -1).T
-        print("\nOutput Predicted: ")
+        print("\n", type, "Output Predicted: ")
         print(output)
-        print("\nActual: ")
+        print("\n", type, "Actual: ")
         print(actual)
 
         # Calculate Accuracy
-        print("\nModel Accuracy: ")
+        print("\n", type, "Model Accuracy: ")
         predictedLabels = (output > 0.5).astype(int)
         accuracy = (predictedLabels == actual).sum() / actual.size
         print(f"Accuracy = {accuracy * 100:.2f}%")
@@ -114,7 +114,7 @@ class NeuralNetwork:
 # Press the green button in the gutter to run the Neural Network.
 if __name__ == '__main__':
     neuralNetwork = NeuralNetwork(numInNodes=4, numHiddenNodes1=8, numHiddenNodes2=4, numOutNodes=1,
-                                  activationFunction='relu', learningRate=0.1, momentum=0.75, epochs=100)
+                                  activationFunction='sigmoid', learningRate=0.1, momentum=0.75, epochs=100)
 
     # Reduce data to two classes, 100 iris flowers total
     xFeatures = iris.data[iris.target != 2]
@@ -123,6 +123,8 @@ if __name__ == '__main__':
 
     neuralNetwork.initiateNetwork()
     neuralNetwork.trainModel(trainingDataX, trainingDataY)
+    neuralNetwork.testModel(trainingDataX)
+    neuralNetwork.renderOutput(trainingDataY, type='TrainingData')
     neuralNetwork.testModel(testDataX)
-    neuralNetwork.renderOutput(testDataY)
+    neuralNetwork.renderOutput(testDataY, type='TestingData')
 
