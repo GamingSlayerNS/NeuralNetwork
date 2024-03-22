@@ -3,6 +3,8 @@
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 
 import math
+import sys
+
 import numpy as np
 import pandas
 from sklearn.datasets import load_iris
@@ -62,14 +64,25 @@ class NeuralNetwork:
         return trainX, trainY, testX, testY
 
     def initiateNetwork(self):
+        activationFunctionsList = {
+            'sigmoid': (sigmoid, sigmoidPrime),
+            'tanh': (tanh, tanhPrime),
+            'relu': (relu, reluPrime)
+        }
+
         # Create NeuralNetwork
         print("\nGenerating NeuralNetwork...")
-        self.network.add(HiddenLayer(self.numInNodes, self.numHiddenNodes1, "1st Hidden"))
-        self.network.add(ActivationLayer(sigmoid, sigmoidPrime))
-        self.network.add(HiddenLayer(self.numHiddenNodes1, self.numHiddenNodes2, "2nd Hidden"))
-        self.network.add(ActivationLayer(sigmoid, sigmoidPrime))
-        self.network.add(HiddenLayer(self.numHiddenNodes2, self.numOutNodes, "Output"))
-        self.network.add(ActivationLayer(sigmoid, sigmoidPrime))
+        if self.activationFunction not in activationFunctionsList:
+            print("Error: Invalid activation function.")
+            sys.exit(1)
+        else:
+            activation, activationPrime = activationFunctionsList[self.activationFunction]
+            self.network.add(HiddenLayer(self.numInNodes, self.numHiddenNodes1, "1st Hidden"))
+            self.network.add(ActivationLayer(activation, activationPrime))
+            self.network.add(HiddenLayer(self.numHiddenNodes1, self.numHiddenNodes2, "2nd Hidden"))
+            self.network.add(ActivationLayer(activation, activationPrime))
+            self.network.add(HiddenLayer(self.numHiddenNodes2, self.numOutNodes, "Output"))
+            self.network.add(ActivationLayer(activation, activationPrime))
 
     def trainModel(self, trainingDataX, trainingDataY):
         # Train Model
@@ -83,6 +96,7 @@ class NeuralNetwork:
 
     def renderOutput(self, actualY):
         # Display Output
+        np.set_printoptions(precision=6, suppress=True)
         output = np.array([item.ravel() for item in self.outputLayer]).T
         actual = actualY.reshape(actualY.shape[0], -1).T
         print("\nOutput Predicted: ")
@@ -100,7 +114,7 @@ class NeuralNetwork:
 # Press the green button in the gutter to run the Neural Network.
 if __name__ == '__main__':
     neuralNetwork = NeuralNetwork(numInNodes=4, numHiddenNodes1=8, numHiddenNodes2=4, numOutNodes=1,
-                                  activationFunction=1, learningRate=0.1, momentum=0.75, epochs=100)
+                                  activationFunction='relu', learningRate=0.1, momentum=0.75, epochs=100)
 
     # Reduce data to two classes, 100 iris flowers total
     xFeatures = iris.data[iris.target != 2]
