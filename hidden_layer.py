@@ -2,7 +2,7 @@ import numpy as np
 
 
 class HiddenLayer:
-    def __init__(self, inputSize, outputSize):
+    def __init__(self, inputSize, outputSize, name):
         # Relu uses He Weight Activation
         self.weights = np.random.randn(inputSize, outputSize) * np.sqrt(2 / inputSize)
         self.bias = np.zeros((1, outputSize))
@@ -12,7 +12,7 @@ class HiddenLayer:
         # self.weights = np.random.randn(inputSize, outputSize) * np.sqrt(1 / (inputSize + outputSize))
         # self.weights = np.random.randn(inputSize, outputSize) * np.sqrt(1 / inputSize)
         # self.bias = np.random.rand(1, outputSize) - 0.5
-        print("Layer: ")
+        print(name, " Layer (", inputSize, "x", outputSize, "): ")
         print("Weights: ", self.weights)
         print("Bias: ", self.bias)
 

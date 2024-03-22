@@ -15,7 +15,7 @@ class Network:
         nodes = len(trainingDataX)
 
         # Initiate Train
-        print("Start Training...")
+        print("\nStart Training...")
         for i in range(epochs):
             errorForward = 0
             # Initiate ForwardPropagation

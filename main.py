@@ -31,25 +31,44 @@ class NeuralNetwork:
         self.momentum = momentum
         self.epochs = epochs
 
-    def cleanData(self, xFeatures, yClass):
-        # Cleanup Iris data
+    def preprocessData(self, xFeatures, yClass):
+        # Example Input Data:
+        # reshapedX = np.array([[[0, 0]], [[0, 1]], [[1, 0]], [[1, 1]]])
+        # reshapedY = np.array([[[0]], [[1]], [[1]], [[0]]])
 
-        # OldInputData
-        # trainingDataX = np.array([[[0, 0]], [[0, 1]], [[1, 0]], [[1, 1]]])
-        # trainingDataY = np.array([[[0]], [[1]], [[1]], [[0]]])
-        print(xFeatures.reshape(xFeatures.shape[0], 1, xFeatures.shape[1]))
-        print(yClass.reshape(yClass.shape[0], 1, 1))
+        # Cleanup Iris data
+        print("Dataset Features: ")
+        print(xFeatures)
+        print("\nDataset Classes: ")
+        print(yClass)
         reshapedX = xFeatures.reshape(xFeatures.shape[0], 1, xFeatures.shape[1])
         reshapedY = yClass.reshape(yClass.shape[0], 1, 1)
-        return reshapedX, reshapedY
+
+        # Shuffle Data
+        print("\nShuffling Data...")
+        indices = np.arange(reshapedX.shape[0])
+        np.random.shuffle(indices)
+        shuffledX = reshapedX[indices]
+        shuffledY = reshapedY[indices]
+
+        # Split Data as 80% for training and 20% for testing
+        print("\nSplitting Data 80%/20%...")
+        split_size = int(shuffledX.shape[0] * 0.8)
+        trainX = shuffledX[:split_size]
+        trainY = shuffledY[:split_size]
+        testX = shuffledX[split_size:]
+        testY = shuffledY[split_size:]
+
+        return trainX, trainY, testX, testY
 
     def initiateNetwork(self):
         # Create NeuralNetwork
-        self.network.add(HiddenLayer(self.numInNodes, self.numHiddenNodes1))
+        print("\nGenerating NeuralNetwork...")
+        self.network.add(HiddenLayer(self.numInNodes, self.numHiddenNodes1, "1st Hidden"))
         self.network.add(ActivationLayer(sigmoid, sigmoidPrime))
-        self.network.add(HiddenLayer(self.numHiddenNodes1, self.numHiddenNodes2))
+        self.network.add(HiddenLayer(self.numHiddenNodes1, self.numHiddenNodes2, "2nd Hidden"))
         self.network.add(ActivationLayer(sigmoid, sigmoidPrime))
-        self.network.add(HiddenLayer(self.numHiddenNodes2, self.numOutNodes))
+        self.network.add(HiddenLayer(self.numHiddenNodes2, self.numOutNodes, "Output"))
         self.network.add(ActivationLayer(sigmoid, sigmoidPrime))
 
     def trainModel(self, trainingDataX, trainingDataY):
@@ -62,30 +81,34 @@ class NeuralNetwork:
         # Test Model
         self.outputLayer = self.network.classify(trainingDataX)
 
-    def renderNeuralNetwork(self):
+    def renderOutput(self, actualY):
         # Display Output
-        print("")
-        print(self.outputLayer)
+        output = np.array([item.ravel() for item in self.outputLayer]).T
+        actual = actualY.reshape(actualY.shape[0], -1).T
+        print("\nOutput Predicted: ")
+        print(output)
+        print("\nActual: ")
+        print(actual)
+
+        # Calculate Accuracy
+        print("\nModel Accuracy: ")
+        predictedLabels = (output > 0.5).astype(int)
+        accuracy = (predictedLabels == actual).sum() / actual.size
+        print(f"Accuracy = {accuracy * 100:.2f}%")
 
 
 # Press the green button in the gutter to run the Neural Network.
 if __name__ == '__main__':
     neuralNetwork = NeuralNetwork(numInNodes=4, numHiddenNodes1=8, numHiddenNodes2=4, numOutNodes=1,
-                                  activationFunction=1, learningRate=0.1, momentum=0, epochs=100)
+                                  activationFunction=1, learningRate=0.1, momentum=0.75, epochs=100)
 
-    # Reduce data to two classes
-    yClass = iris.target[iris.target != 2]
+    # Reduce data to two classes, 100 iris flowers total
     xFeatures = iris.data[iris.target != 2]
-    trainingDataX, trainingDataY = neuralNetwork.cleanData(xFeatures, yClass)
-
-    # metadata
-    # print(iris.metadata)
-
-    # variable information
-    # print(iris.variables)
+    yClass = iris.target[iris.target != 2]
+    trainingDataX, trainingDataY, testDataX, testDataY = neuralNetwork.preprocessData(xFeatures, yClass)
 
     neuralNetwork.initiateNetwork()
     neuralNetwork.trainModel(trainingDataX, trainingDataY)
-    neuralNetwork.testModel(trainingDataX)
-    neuralNetwork.renderNeuralNetwork()
+    neuralNetwork.testModel(testDataX)
+    neuralNetwork.renderOutput(testDataY)
 
