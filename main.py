@@ -124,7 +124,7 @@ if __name__ == '__main__':
     neuralNetwork.initiateNetwork()
     neuralNetwork.trainModel(trainingDataX, trainingDataY)
     neuralNetwork.testModel(trainingDataX)
-    neuralNetwork.renderOutput(trainingDataY, type='TrainingData')
+    neuralNetwork.renderOutput(trainingDataY, type='Training')
     neuralNetwork.testModel(testDataX)
-    neuralNetwork.renderOutput(testDataY, type='TestingData')
+    neuralNetwork.renderOutput(testDataY, type='Testing')
 
