@@ -11,7 +11,7 @@ class Network:
         self.errorFunction = errorFunction
         self.deltaErrorFunction = deltaErrorFunction
 
-    def train(self, trainingDataX, trainingDataY, epochs, learningRate):
+    def train(self, trainingDataX, trainingDataY, epochs, learningRate, momentum):
         nodes = len(trainingDataX)
 
         # Initiate Train
@@ -32,7 +32,7 @@ class Network:
                 # print("Backwardpass...")
                 errorBackward = self.deltaErrorFunction(trainingDataY[j], output)
                 for layer in reversed(self.layers):
-                    errorBackward = layer.backwardPropagation(errorBackward, learningRate)
+                    errorBackward = layer.backwardPropagation(errorBackward, learningRate, momentum)
 
             errorForward /= nodes
             print('epoch: %d/%d   Training Loss: %f' % (i+1, epochs, errorForward))

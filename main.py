@@ -20,7 +20,7 @@ iris = load_iris()
 
 
 class NeuralNetwork:
-    def __init__(self, numInNodes, numHiddenNodes1, numHiddenNodes2, numOutNodes, activationFunction, learningRate, epochs):
+    def __init__(self, numInNodes, numHiddenNodes1, numHiddenNodes2, numOutNodes, activationFunction, learningRate, momentum, epochs):
         self.network = Network()
         self.numInNodes = numInNodes
         self.numHiddenNodes1 = numHiddenNodes1
@@ -28,6 +28,7 @@ class NeuralNetwork:
         self.numOutNodes = numOutNodes
         self.activationFunction = activationFunction
         self.learningRate = learningRate
+        self.momentum = momentum
         self.epochs = epochs
 
     def cleanData(self, xFeatures, yClass):
@@ -54,7 +55,8 @@ class NeuralNetwork:
     def trainModel(self, trainingDataX, trainingDataY):
         # Train Model
         self.network.useErrorFunction(mse, derivativeMSE)
-        self.network.train(trainingDataX, trainingDataY, epochs=self.epochs, learningRate=self.learningRate)
+        self.network.train(trainingDataX, trainingDataY, epochs=self.epochs, learningRate=self.learningRate,
+                           momentum=self.momentum)
 
     def testModel(self, trainingDataX):
         # Test Model
@@ -69,7 +71,7 @@ class NeuralNetwork:
 # Press the green button in the gutter to run the Neural Network.
 if __name__ == '__main__':
     neuralNetwork = NeuralNetwork(numInNodes=4, numHiddenNodes1=8, numHiddenNodes2=4, numOutNodes=1,
-                                  activationFunction=1, learningRate=0.1, epochs=1000)
+                                  activationFunction=1, learningRate=0.1, momentum=0, epochs=100)
 
     # Reduce data to two classes
     yClass = iris.target[iris.target != 2]
